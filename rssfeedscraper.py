@@ -1,6 +1,8 @@
 """This will scrape an RSS feed and return any items matching our naming convention"""
+from datetime import datetime
 
 import feedparser
+import pytz
 from abstorrentscraper import AbsTorrentScraper
 from torrentlink import TorrentLink
 
@@ -14,6 +16,7 @@ class RSSFeedScraper(AbsTorrentScraper):
 
         for item in feed['items']:
             season, episode = 0, 0
+            date = datetime.utcnow()
 
             try:
                 # Try to match this entry against the naming convention we defined before
@@ -31,9 +34,15 @@ class RSSFeedScraper(AbsTorrentScraper):
                 except (KeyError, ValueError):
                     pass
 
+                try:
+                    # Add a date if we could find one
+                    date = datetime(*item['published_parsed'][:6], tzinfo=pytz.utc)
+                except Exception as exception:
+                    print(exception)
+
                 # If everything worked out okay, let's "yield" it.
                 # See https://wiki.python.org/moin/Generators
-                yield TorrentLink(season, episode, item['link'])
+                yield TorrentLink(season, episode, item['link'], date)
 
             except AttributeError as e:
                 print(e)
