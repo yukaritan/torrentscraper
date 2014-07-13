@@ -1,4 +1,5 @@
 from rssfeedscraper import RSSFeedScraper
+from torrentlink import sort_key
 
 
 def test():
@@ -8,7 +9,7 @@ def test():
     feed = RSSFeedScraper(url=url, naming_convention=naming_convention)
 
     links = feed.get_torrent_links()
-    for link in links:
+    for link in sorted(links, key=sort_key):
         print(link)
 
 

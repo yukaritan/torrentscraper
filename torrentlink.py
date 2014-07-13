@@ -10,3 +10,16 @@ or if the former isn't available, it shoud be set to the time when you first saw
 
 from collections import namedtuple
 TorrentLink = namedtuple('TorrentLink', ['season', 'episode', 'url', 'date'])
+
+
+def sort_key(torrentlink: TorrentLink):
+    """
+    Use with sorted() as the key to sort by, and you'll get the torrent links by
+    season, descending; episode, descending; date, ascending.
+    In other words, you get the latest episode first.
+
+    links = feed.get_torrent_links()
+    for link in sorted(links, key=sort_key):
+        print(link)
+    """
+    return -torrentlink.season, -torrentlink.episode, torrentlink.date
