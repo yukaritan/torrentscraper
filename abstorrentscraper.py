@@ -1,7 +1,6 @@
 """This is an abstract class. Do not instantiate directly."""
 
 from re import compile
-from regex import Regex
 from torrentlink import TorrentLink
 
 
@@ -24,7 +23,7 @@ class AbsTorrentScraper:
         """If a series number can't be found, use this number instead"""
         return self._fallback_series_number
 
-    def get_naming_convention(self) -> Regex:
+    def get_naming_convention(self):
         """
         This is used to get a naming convention.
         It's useful both to find a specific torrent and,
