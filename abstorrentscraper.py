@@ -8,15 +8,21 @@ from torrentlink import TorrentLink
 class AbsTorrentScraper:
     """This is an abstract class. Do not instantiate directly."""
 
-    def __init__(self, url: str, naming_convention: str=None):
+    def __init__(self, url: str, naming_convention: str=None, fallback_series_number=0):
         self._url = url
         self._naming_convention = None
         self.set_naming_convention(naming_convention)
+        self._fallback_series_number = fallback_series_number
 
     @property
     def url(self) -> str:
         """This returns the URL you passed to the constructor"""
         return self._url
+
+    @property
+    def fallback_series_number(self) -> int:
+        """If a series number can't be found, use this number instead"""
+        return self._fallback_series_number
 
     def get_naming_convention(self) -> Regex:
         """

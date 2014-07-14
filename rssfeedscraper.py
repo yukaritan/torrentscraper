@@ -12,10 +12,13 @@ class RSSFeedScraper(AbsTorrentScraper):
         """This will scrape an RSS feed and return any items matching our naming convention"""
 
         feed = feedparser.parse(self._url)
+        if feed['bozo'] == 1:
+            raise Exception(feed['bozo_exception'])
+
         naming = self.get_naming_convention()
 
         for item in feed['items']:
-            season, episode = 0, 0
+            season, episode = self.fallback_series_number, 0
             date = datetime.utcnow()
 
             try:
@@ -45,7 +48,7 @@ class RSSFeedScraper(AbsTorrentScraper):
                 yield TorrentLink(season, episode, item['link'], date)
 
             except AttributeError as e:
-                print(e)
+                print("failed to parse", item['title'])
                 pass
 
 
